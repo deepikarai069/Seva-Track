@@ -1,0 +1,33 @@
+services:
+  db:
+    image: mariadb:10.11
+    environment:
+      MARIADB_DATABASE: sevatrack
+      MARIADB_USER: sevatrack
+      MARIADB_PASSWORD: sevatrack
+      MARIADB_ROOT_PASSWORD: rootpass
+      TZ: Asia/Kolkata
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./db:/docker-entrypoint-initdb.d:ro     # 01_schema, 02_routines, 03_seed run on first start
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:mariadb://db:3306/sevatrack
+      DB_USER: sevatrack
+      DB_PASSWORD: sevatrack
+      SLA_CHECK_INTERVAL_SECONDS: "60"
+    ports:
+      - "8080:8080"
+
+volumes:
+  dbdata:

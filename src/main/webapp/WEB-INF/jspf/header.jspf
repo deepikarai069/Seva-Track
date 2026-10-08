@@ -1,0 +1,21 @@
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><c:out value="${empty pageTitle ? 'SevaTrack' : pageTitle}"/> - SevaTrack</title>
+  <link rel="stylesheet" href="${ctx}/static/style.css">
+</head>
+<body>
+<header class="bar">
+  <a class="brand" href="${ctx}/"><span class="mark">S</span>SevaTrack</a>
+  <nav>
+    <a href="${ctx}/register">Report a problem</a>
+    <a href="${ctx}/track">Track ticket</a>
+    <a href="${ctx}/officer">Officer desk</a>
+    <a href="${ctx}/admin">Control room</a>
+  </nav>
+</header>
+<main>
+<c:if test="${not empty flash}"><p class="notice" role="status"><c:out value="${flash}"/></p></c:if>
